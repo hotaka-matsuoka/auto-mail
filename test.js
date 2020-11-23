@@ -19,12 +19,12 @@ function sendMail() {
   let doc = DocumentApp.openByUrl(DOC_URL);
   let docText = doc.getBody().getText();
   
-  let subject = 'メール送信テスト'; //題名
-  let options = {name: 'これはメール自動送信のテストです'}; //件名
+  let subject = sheet.getRange("G2").getValue(); //件名
+  let kenmei = sheet.getRange("H2").getValue(); //From
+  let options = {name: `${kenmei}`}; //From
   
   for(let i = 1; i < lastRow; i++) {
     if (!sendedCheck(i, values)) {
-      console.log(`${values[i][0]} ${values[i][1]}に送信しました`)
       let range = sheet.getRange(i + 1, 5);
       range.check();
       
@@ -36,7 +36,7 @@ function sendMail() {
       .replace('{社名}', company)
       .replace('{担当者名}', name);
       
-      // GmailApp.sendEmail(recipient, subject, body, options);
+      GmailApp.sendEmail(recipient, subject, body, options);
     }
   }
 }
