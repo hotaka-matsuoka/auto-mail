@@ -19,8 +19,8 @@ function sendMail() {
   let doc = DocumentApp.openByUrl(DOC_URL);
   let docText = doc.getBody().getText();
   
-  let subject = sheet.getRange("G2").getValue(); //件名
-  let kenmei = sheet.getRange("H2").getValue(); //From
+  let subject = sheet.getRange("H2").getValue(); //件名
+  let kenmei = sheet.getRange("G2").getValue(); //From
   let options = {name: `${kenmei}`}; //From
   
   for(let i = 1; i < lastRow; i++) {
