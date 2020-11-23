@@ -1,9 +1,20 @@
+function confirmation() {
+  let ui = SpreadsheetApp.getUi();
+  let title = 'メールを送信しますか?';
+  let response = ui.alert(title, ui.ButtonSet.YES_NO);
+  if (response == ui.Button.YES) {
+    sendMail()
+  } else {
+    return false
+  }
+}
+
 function sendMail() {
   let spreadSheet = SpreadsheetApp.openById('17xqYvL50zH6PjRIYukP2Rt52rMVMQXHVnJVmEhmQQg4')
   let sheet = spreadSheet.getSheetByName('シート1');
   let lastRow = sheet.getLastRow();
   let values = sheet.getRange(1, 1, lastRow, 5).getValues();
- 
+  
   let DOC_URL = 'https://docs.google.com/document/d/1UF1KdQ5MgrxEE9jNr2laP5uVIMi6i-EzSON6xPman4g/edit';
   let doc = DocumentApp.openByUrl(DOC_URL);
   let docText = doc.getBody().getText();
