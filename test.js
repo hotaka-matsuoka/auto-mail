@@ -10,10 +10,14 @@ function confirmation() {
 }
 
 function sendMail() {
-  let spreadSheet = SpreadsheetApp.openById('17xqYvL50zH6PjRIYukP2Rt52rMVMQXHVnJVmEhmQQg4')
-  let sheet = spreadSheet.getSheetByName('シート1');
+  let spreadSheet = SpreadsheetApp.openById('17xqYvL50zH6PjRIYukP2Rt52rMVMQXHVnJVmEhmQQg4');
+  let sheet = spreadSheet.getSheetByName('クライアント一覧');
   let lastRow = sheet.getLastRow();
-  let values = sheet.getRange(1, 1, lastRow, 5).getValues();
+  let clients = sheet.getRange(1, 1, lastRow, 5).getValues();
+  
+  let sheet_2 = spreadSheet.getSheetByName('送信非対称クライアント一覧');
+  let sheet_2_lastRow = sheet_2.getLastRow();
+  let notSendClients = sheet_2.getRange(2, 2, sheet_2_lastRow -1).getValues().flat();
   
   let DOC_URL = 'https://docs.google.com/document/d/1UF1KdQ5MgrxEE9jNr2laP5uVIMi6i-EzSON6xPman4g/edit';
   let doc = DocumentApp.openByUrl(DOC_URL);
@@ -24,19 +28,21 @@ function sendMail() {
   let options = {name: `${kenmei}`}; //From
   
   for(let i = 1; i < lastRow; i++) {
-    if (!sendedCheck(i, values)) {
-      let range = sheet.getRange(i + 1, 5);
-      range.check();
-      
-      let company = values[i][1]; //会社名
-      let name = values[i][2];  //名前
-      let recipient = values[i][3]; //宛先
-      
-      let body = docText
-      .replace('{社名}', company)
-      .replace('{担当者名}', name);
-      
-      GmailApp.sendEmail(recipient, subject, body, options);
+    if (!notSendClients.includes(clients[i][1])) {
+      if (!sendedCheck(i, clients)) {
+        let range = sheet.getRange(i + 1, 5);
+        range.check();
+        
+        let company = clients[i][1]; //会社名
+        let name = clients[i][2];  //名前
+        let recipient = clients[i][3]; //宛先
+        
+        let body = docText
+        .replace('{社名}', company)
+        .replace('{担当者名}', name);
+        
+        //GmailApp.sendEmail(recipient, subject, body, options);
+      }
     }
   }
 }
