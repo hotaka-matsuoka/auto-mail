@@ -41,7 +41,7 @@ function sendMail() {
         .replace('{社名}', company)
         .replace('{担当者名}', name);
         
-        //GmailApp.sendEmail(recipient, subject, body, options);
+        GmailApp.sendEmail(recipient, subject, body, options);
       }
     }
   }
